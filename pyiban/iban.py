@@ -20,19 +20,24 @@ class Iban(object):
     @classmethod
     def get_bank_code(cls, iban):
         if cls.validate_iban(iban):
-            return iban[4:12]
+            country_code = iban[:2]
+            snippet = bban_format.get(country_code).get("bank_code")
+            return int(iban[snippet[0]:snippet[1]])
 
     @classmethod
     def get_account_number(cls, iban):
         if cls.validate_iban(iban):
-            return iban[12:]
+            country_code = iban[:2]
+            snippet = bban_format.get(country_code).get("account_number")
+            return int(iban[snippet[0]:snippet[1]])
 
 
     @classmethod
     def validate_iban(cls, iban):
         # check if country code is valid,
         # then check if iban length is correct for that country
-        length_for_country = bban_format.get(iban[:2],{}).get("length", 0)
+        country_code = iban[:2].upper()
+        length_for_country = bban_format.get(country_code,{}).get("length", 0)
         if not length_for_country or len(iban) != length_for_country:
             return False
         return cls._to_base_10_Str(iban) % 97 == 1
@@ -62,7 +67,7 @@ class Iban(object):
         bban = bban_format.get(country,{}).get("composition").format(**data)
         return bban
 
-
+"""
 ibans = [
     "AL47 2121 1009 0000 0002 3569 8741",     # Albania
     "AD12 0001 2030 2003 5910 0100",          # Andorra
@@ -203,8 +208,4 @@ ibans = [
     "AE260211000000230064016",
     "GB29NWBK60161331926819",
     "VG96VPVG0000012345678901"]
-
-
-
-for iban in ibans:
-    print(Iban.validate_iban(iban), iban)
+"""
