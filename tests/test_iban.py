@@ -1,4 +1,4 @@
-from pyiban.iban import Iban
+from pyiban import get_bank_code, get_iban, get_account_number, validate_iban
 
 
 def test_get_iban():
@@ -7,7 +7,7 @@ def test_get_iban():
     account_number = 532013000
 
     expected_iban = "DE89370400440532013000"
-    generated_iban = Iban.get_iban(country_code=country,
+    generated_iban = get_iban(country_code=country,
                                    bank_code=bank_code,
                                    account_number=account_number)
 
@@ -16,7 +16,7 @@ def test_get_iban():
 
 def test_get_bank_code():
     iban = "DE89370400440532013000"
-    retrieved_bank_code = Iban.get_bank_code(iban)
+    retrieved_bank_code = get_bank_code(iban)
 
     expected_bank_code = 37040044
 
@@ -26,5 +26,5 @@ def test_get_bank_code():
 def test_get_account_number():
     iban = "DE89370400440532013000"
     expected_account_number = 532013000
-    retrieved_account_number = Iban.get_account_number(iban)
+    retrieved_account_number = get_account_number(iban)
     assert(expected_account_number == retrieved_account_number)

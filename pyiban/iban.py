@@ -4,68 +4,64 @@ from bban import bban_format
 
 IBAN_ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
-class Iban(object):
 
-    @classmethod
-    def get_iban(cls, country_code, bank_code, account_number, branch_number=None):
-        data ={"country_code": country_code,
-               "bank_code": bank_code,
-               "account_number": account_number,
-               "branch_number": branch_number }
-        bban = cls._generate_bban(data)
-        check_sum = cls._iban_check_sum(country_code, bban)
-        iban = country_code + check_sum + bban
-        return iban
-
-    @classmethod
-    def get_bank_code(cls, iban):
-        if cls.validate_iban(iban):
-            country_code = iban[:2]
-            snippet = bban_format.get(country_code).get("bank_code")
-            return int(iban[snippet[0]:snippet[1]])
-
-    @classmethod
-    def get_account_number(cls, iban):
-        if cls.validate_iban(iban):
-            country_code = iban[:2]
-            snippet = bban_format.get(country_code).get("account_number")
-            return int(iban[snippet[0]:snippet[1]])
+def get_iban(country_code, bank_code, account_number, branch_number=None):
+    data ={"country_code": country_code,
+           "bank_code": bank_code,
+           "account_number": account_number,
+           "branch_number": branch_number }
+    bban = _generate_bban(data)
+    check_sum = _iban_check_sum(country_code, bban)
+    iban = country_code + check_sum + bban
+    return iban
 
 
-    @classmethod
-    def validate_iban(cls, iban):
-        # check if country code is valid,
-        # then check if iban length is correct for that country
-        country_code = iban[:2].upper()
-        length_for_country = bban_format.get(country_code,{}).get("length", 0)
-        if not length_for_country or len(iban) != length_for_country:
-            return False
-        return cls._to_base_10_Str(iban) % 97 == 1
+def get_bank_code(iban):
+    if validate_iban(iban):
+        country_code = iban[:2]
+        snippet = bban_format.get(country_code).get("bank_code")
+        return int(iban[snippet[0]:snippet[1]])
 
 
-    @classmethod
-    def _to_base_10_Str(cls, iban):
-        #remove all spaces
-        result = iban.replace(" ", "")
-        # move first 4 chars to the end
-        result = result[4:]+result[:4]
-        # 0->0, 1->1, ..., A -> 10, B->11, ..., Z->35
-        result = "".join(str(IBAN_ALPHABET.index(c)) for c in result)
-        # cut leading zeros
-        return int(result)
+def get_account_number(iban):
+    if validate_iban(iban):
+        country_code = iban[:2]
+        snippet = bban_format.get(country_code).get("account_number")
+        return int(iban[snippet[0]:snippet[1]])
 
-    @classmethod
-    def _iban_check_sum(cls, country_code, bban):
-        check_string = bban + country_code + "00"
-        check_string = "".join(str(IBAN_ALPHABET.index(c)) for c in check_string)
-        check_sum = 98 - int(check_string) % 97
-        return "%02d" % check_sum
 
-    @classmethod
-    def _generate_bban(cls, data):
-        country = data.get("country_code")
-        bban = bban_format.get(country,{}).get("composition").format(**data)
-        return bban
+def validate_iban(iban):
+    # check if country code is valid,
+    # then check if iban length is correct for that country
+    country_code = iban[:2].upper()
+    length_for_country = bban_format.get(country_code,{}).get("length", 0)
+    if not length_for_country or len(iban) != length_for_country:
+        return False
+    return _to_base_10_Str(iban) % 97 == 1
+
+
+def _to_base_10_Str(iban):
+    #remove all spaces
+    result = iban.replace(" ", "")
+    # move first 4 chars to the end
+    result = result[4:]+result[:4]
+    # 0->0, 1->1, ..., A -> 10, B->11, ..., Z->35
+    result = "".join(str(IBAN_ALPHABET.index(c)) for c in result)
+    # cut leading zeros
+    return int(result)
+
+
+def _iban_check_sum(country_code, bban):
+    check_string = bban + country_code + "00"
+    check_string = "".join(str(IBAN_ALPHABET.index(c)) for c in check_string)
+    check_sum = 98 - int(check_string) % 97
+    return "%02d" % check_sum
+
+
+def _generate_bban(data):
+    country = data.get("country_code")
+    bban = bban_format.get(country,{}).get("composition").format(**data)
+    return bban
 
 """
 ibans = [
