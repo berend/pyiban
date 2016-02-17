@@ -1,4 +1,4 @@
-# implements https://en.wikipedia.org/wiki/International_Bank_Account_Number
+"""This implements https://en.wikipedia.org/wiki/International_Bank_Account_Number"""
 
 from bban import bban_format
 
