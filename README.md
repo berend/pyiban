@@ -2,37 +2,35 @@
 validate and generate IBANs
 
 
-Right now this only supports validating and creating german IBANs. It will be enhanced to cover all IBANs 
-out there.
+Right now this only supports validating and creating german IBANs. It will be enhanced to cover all IBANs out there.
 
 
 ## Install
 
 you can easily install pyiban with pip:
 
-    pip install pyiban
-    
-    
+    $ pip install pyiban
+
+
 ## Usage
-    
+
     from pyiban import get_iban
-    
+
     country = "DE"
     bank_code = 37040044
     account_number = 532013000
 
     generated_iban = get_iban(country_code=country,
-                                   bank_code=bank_code,
-                                   account_number=account_number)
+                              bank_code=bank_code,
+                              account_number=account_number)
 
-    
+
 ## Run tests
 
-pyiban comes with some tests, actually currently only one (what a shame!). If you are tinkering with it and want to if you broke something just
-run
+`pyiban` comes with some tests. If you are tinkering with it and want to check if you broke something just run
 
-    tox
-    
+    $ tox
+
 ## Changelog
 
 ### V0.2
