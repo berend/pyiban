@@ -1,8 +1,10 @@
 """This implements https://en.wikipedia.org/wiki/International_Bank_Account_Number"""
 
+import string
+
 from bban import bban_format
 
-IBAN_ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+IBAN_ALPHABET = string.digits + string.uppercase
 
 
 def get_iban(country_code, bank_code, account_number, branch_number=None):
