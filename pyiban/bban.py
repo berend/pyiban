@@ -2,7 +2,9 @@ bban_format = {
     "AD": {
         "composition": "{04:bank_code}{04:branch_code}{012:account_number}",
         "country": "Andorra",
-        "bank_code"
+        "bank_code": [4, 8],
+        "branch_identifier": [8,12],
+        "account_number": [12, 24],
         "length": 24
 
     },

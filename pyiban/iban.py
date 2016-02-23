@@ -7,7 +7,7 @@ from bban import bban_format
 IBAN_ALPHABET = string.digits + string.uppercase
 
 
-def get_iban(country_code, bank_code, account_number, branch_number=None):
+def generate_iban(country_code, bank_code, account_number, branch_number=None):
     data = {
         "country_code": country_code,
         "bank_code": bank_code,
@@ -20,14 +20,14 @@ def get_iban(country_code, bank_code, account_number, branch_number=None):
     return iban
 
 
-def get_bank_code(iban):
+def extract_bank_code(iban):
     if validate_iban(iban):
         country_code = iban[:2]
         snippet = bban_format.get(country_code).get("bank_code")
         return int(iban[snippet[0]:snippet[1]])
 
 
-def get_account_number(iban):
+def extract_account_number(iban):
     if validate_iban(iban):
         country_code = iban[:2]
         snippet = bban_format.get(country_code).get("account_number")
